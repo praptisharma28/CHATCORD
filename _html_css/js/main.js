@@ -18,3 +18,34 @@ socket.on('roomUsers', ({ room, users }) => {
   outputRoomName(room);
   outputUsers(users);
 });
+
+// Message from server
+socket.on('message', (message) => {
+    console.log(message);
+    outputMessage(message);
+  
+    // Scroll down
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  });
+  
+  // Message submit
+  chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+  
+    // Get message text
+    let msg = e.target.elements.msg.value;
+  
+    msg = msg.trim();
+  
+    if (!msg) {
+      return false;
+    }
+  
+    // Emit message to server
+    socket.emit('chatMessage', msg);
+  
+    // Clear input
+    e.target.elements.msg.value = '';
+    e.target.elements.msg.focus();
+  });
+  
